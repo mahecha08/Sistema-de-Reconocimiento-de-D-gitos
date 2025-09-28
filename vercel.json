@@ -1,8 +1,8 @@
 {
     "rewrites": [
         {
-            "source": "/api/(.*)",
-            "destination": "http://ec2-54-81-142-28.compute-1.amazonaws.com:8080/predict"
+            "source": "/(.*)",
+            "destination": "/"
         }
     ]
 }
