@@ -32,39 +32,30 @@ export const ImageForm = () => {
         formData.append("invert", `${invert}`)
         formData.append("image", image!)
 
-        fetch("/api/predict", {
+        fetch("http://ec2-54-81-142-28.compute-1.amazonaws.com:8080/predict", {
             method: "POST",
             body: formData
-        })
-            .then((response) => {
-                console.log("🔎 Respuesta cruda del servidor:", response);
-
-                if (!response.ok) {
-                    throw new Error(`Error en la petición: ${response.status} ${response.statusText}`);
+        }).then(
+            (Response) => {
+                if (!Response.ok) {
+                    alert(`Error: ${Response.statusText}`)
                 }
-                return response.json() as Promise<imagen>;
+                return Response.json() as unknown as imagen
             })
-            .then((imageResponse) => {
-                console.log("✅ JSON recibido:", imageResponse);
-
-                setImageResponse(imageResponse);
+            .then((imagaeResponse) => {
+                setImageResponse(imagaeResponse);
 
                 // Guardar en LocalStorage
                 const history = JSON.parse(localStorage.getItem("history") || "[]");
                 history.push({
-                    prediction: imageResponse.prediction,
-                    accuracy: imageResponse.accuracy,
-                    process_time: imageResponse.process_time,
+                    prediction: imagaeResponse.prediction,
+                    accuracy: imagaeResponse.accuracy,
+                    process_time: imagaeResponse.process_time,
                     date: new Date().toLocaleString(),
                 });
                 localStorage.setItem("history", JSON.stringify(history));
             })
-            .catch(error => {
-                console.error("❌ Error en la petición:", error);
-                alert(`Error: ${error}`);
-            })
-            .finally(() => setCargar(false));
-
+            .catch(error => alert(`Error: ${error}`)).finally(() => setCargar(false))
 
     }
 
