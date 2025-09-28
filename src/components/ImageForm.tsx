@@ -32,30 +32,31 @@ export const ImageForm = () => {
         formData.append("invert", `${invert}`)
         formData.append("image", image!)
 
-        fetch("http://ec2-54-81-142-28.compute-1.amazonaws.com:8080/predict", {
+        fetch("/api/predict", {
             method: "POST",
             body: formData
-        }).then(
-            (Response) => {
+        })
+            .then((Response) => {
                 if (!Response.ok) {
-                    alert(`Error: ${Response.statusText}`)
+                    alert(`Error: ${Response.statusText}`);
                 }
-                return Response.json() as unknown as imagen
+                return Response.json() as unknown as imagen;
             })
-            .then((imagaeResponse) => {
-                setImageResponse(imagaeResponse);
+            .then((imageResponse) => {
+                setImageResponse(imageResponse);
 
                 // Guardar en LocalStorage
                 const history = JSON.parse(localStorage.getItem("history") || "[]");
                 history.push({
-                    prediction: imagaeResponse.prediction,
-                    accuracy: imagaeResponse.accuracy,
-                    process_time: imagaeResponse.process_time,
+                    prediction: imageResponse.prediction,
+                    accuracy: imageResponse.accuracy,
+                    process_time: imageResponse.process_time,
                     date: new Date().toLocaleString(),
                 });
                 localStorage.setItem("history", JSON.stringify(history));
             })
-            .catch(error => alert(`Error: ${error}`)).finally(() => setCargar(false))
+            .catch(error => alert(`Error: ${error}`))
+            .finally(() => setCargar(false));
 
     }
 
