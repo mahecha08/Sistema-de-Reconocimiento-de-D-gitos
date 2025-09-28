@@ -51,7 +51,7 @@ export const ImageForm = () => {
                     prediction: imagaeResponse.prediction,
                     accuracy: imagaeResponse.accuracy,
                     process_time: imagaeResponse.process_time,
-                    date: new Date().toLocaleString(), // para saber cuándo se hizo la petición
+                    date: new Date().toLocaleString(),
                 });
                 localStorage.setItem("history", JSON.stringify(history));
             })
@@ -119,7 +119,6 @@ export const ImageForm = () => {
                                 </div>
                             )}
 
-                            {/* Botón */}
                             <button
                                 type="submit"
                                 disabled={cargar}
