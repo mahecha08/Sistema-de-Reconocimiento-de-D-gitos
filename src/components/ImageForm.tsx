@@ -36,13 +36,17 @@ export const ImageForm = () => {
             method: "POST",
             body: formData
         })
-            .then((Response) => {
-                if (!Response.ok) {
-                    alert(`Error: ${Response.statusText}`);
+            .then((response) => {
+                console.log("🔎 Respuesta cruda del servidor:", response);
+
+                if (!response.ok) {
+                    throw new Error(`Error en la petición: ${response.status} ${response.statusText}`);
                 }
-                return Response.json() as unknown as imagen;
+                return response.json() as Promise<imagen>;
             })
             .then((imageResponse) => {
+                console.log("✅ JSON recibido:", imageResponse);
+
                 setImageResponse(imageResponse);
 
                 // Guardar en LocalStorage
@@ -55,8 +59,12 @@ export const ImageForm = () => {
                 });
                 localStorage.setItem("history", JSON.stringify(history));
             })
-            .catch(error => alert(`Error: ${error}`))
+            .catch(error => {
+                console.error("❌ Error en la petición:", error);
+                alert(`Error: ${error}`);
+            })
             .finally(() => setCargar(false));
+
 
     }
 
